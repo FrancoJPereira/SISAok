@@ -94,7 +94,7 @@ button:focus-visible {
 
 .main-wrap {
   display: flex;
-  height: 100vh;
+  height: flex;
   transition: all 0.5s ease-in-out;
   overflow: hidden;
 }
@@ -102,8 +102,7 @@ button:focus-visible {
 .main-head {
   background-color: #213547;
   transition: width 0.6s cubic-bezier(0.86, 0, 0.07, 1); /* Suave transición */
-  overflow: hidden;
-  height: 100vh;
+  overflow: hidden;  
   width: 80px; /* Tamaño inicial */
   position: relative;
 }
