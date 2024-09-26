@@ -1,0 +1,446 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;  
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+
+  body {    
+    margin: 0;
+    padding: 0;
+  }
+  
+
+
+
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #bee190;
+    display: flex;
+
+   
+  }  
+  a:hover {
+    color: #000000;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+
+
+
+@media (max-width: 768px) {
+  .main-head {
+    position: fixed;
+    z-index: 999;
+    
+  }
+  
+  .showcase {
+    width: 100%;
+  }
+
+  .main-head.active + .showcase {
+    width: 100%;
+  }
+}
+/* CSS Mejorado para el Side Navigation */
+
+.main-wrap {
+  display: flex;
+  height: 100vh;
+  transition: all 0.5s ease-in-out;
+  overflow: hidden;
+}
+
+.main-head {
+  background-color: #213547;
+  transition: width 0.6s cubic-bezier(0.86, 0, 0.07, 1); /* Suave transición */
+  overflow: hidden;
+  height: 100vh;
+  width: 80px; /* Tamaño inicial */
+  position: relative;
+}
+
+.main-head.active {
+  width: 300px; /* Ancho expandido */
+}
+
+.main-nav {
+  padding: 20px;
+}
+
+.navbar-nav {
+  padding: 0;
+  padding-top: 3rem;
+  margin: 0;
+  list-style: none;
+}
+
+.nav-list-item {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease-in-out, padding 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.nav-list-item:hover {
+  background-color: #ffffff;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+  font-size: 18px;
+  font-family: 'Ubuntu', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: color 0.3s ease-in-out;
+  opacity: 0.8;
+}
+
+.nav-link:hover {
+  opacity: 1;
+}
+
+.nav-link i {
+  font-size: 24px;
+  margin-right: 15px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.main-head.active .nav-link .link-text {
+  opacity: 1;
+  transform: translateX(0); /* Mostrar texto al expandirse */
+}
+
+.nav-link .link-text {
+  margin-left: 10px;
+  opacity: 0;
+  white-space: nowrap;
+  transform: translateX(-20px); /* Oculto cuando el menú está colapsado */
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+/* Transición del botón de hamburguesa */
+.toggler {
+  position: absolute;
+  padding-block: 20px;
+  top: 10px;
+  left: 30px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.4s ease-in-out;
+}
+
+.toggler:hover {
+  transform: rotate(90deg); /* Efecto giratorio */
+}
+
+.showcase {
+  width: calc(100% - 80px);
+  transition: width 0.6s cubic-bezier(0.86, 0, 0.07, 1);
+  position: relative;
+  overflow: hidden;
+ 
+}
+
+.showcase.width {
+  width: calc(100% - 300px); /* Ajuste dinámico del ancho */
+}
+
+
+/* Animación suave de los íconos */
+.nav-list-item:hover .nav-link i {
+  transform: scale(1.2);
+}
+
+/* Estilos para el formulario */
+.form-container {
+  width: auto; 
+  margin: 5rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;   
+  margin-left: 16rem;
+  margin-top: 9rem;
+ 
+}
+
+.form-container h1,
+.form-container h2 {
+  color: #213547;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.form-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-container label {
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-container input{
+  padding: 0.75rem;
+  max-width: 500px;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  
+}
+
+.form-container button{
+  padding-left: 5rem;
+  font-size: 12px;
+  margin-bottom: 0.5rem;
+  margin-left: 6rem; 
+  border-radius: 4px;
+  font-size: 1.1rem;
+  width: 13rem;
+}
+
+
+
+.form-container input:focus {
+  border-color: #8db45a;
+  outline: none;
+  box-shadow: 0 0 5px rgba(83, 91, 242, 0.5);
+}
+
+.form-container button {
+  background-color: #5486c4;
+  color: white;
+  cursor: pointer;
+  padding-left: 10px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.form-container button:hover {
+  background-color: #8db45a;
+  transform: translateY(-2px);
+}
+
+.logo{
+  width: 12rem;
+  display: block;
+  padding-left: 8rem;
+}
+
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button-container button {
+  width: auto; /* Ajusta el ancho al contenido */
+  padding: 10px 20px; /* Ajusta el padding según tus necesidades */
+  font-size: 20px; /* Ajusta el tamaño de la fuente si es necesario */
+}
+
+/*REGISTER*/
+.register-container {  
+  display: flex;
+  margin: 5rem auto ;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+  width: auto ;
+  height: auto;
+  padding: 0px 80px 10px 70px !important;
+  margin: 60px 0px 30px 16rem !important;
+
+  
+}
+
+.register-title {
+  color: #213547;
+  margin-bottom: 1rem;
+  text-align: center;
+  
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.register-form label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.register-form input {
+  padding: 0.75rem;
+  max-width: 400px;
+  margin-bottom: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.register-form input:focus {
+  border-color: #8db45a;
+  outline: none;
+  box-shadow: 0 0 5px rgba(83, 91, 242, 0.5);
+}
+
+.button-register {
+  background-color: #5486c4;
+  color: white;
+  cursor: pointer;
+  padding-left: 10px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  padding: 10px;
+  font-size: 1rem;  
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+}
+
+.button-register:hover {
+  background-color: #8db45a;
+  transform: translateY(-2px);
+}
+
+/* Chart*/
+.dashboard-container {
+  max-height: auto;
+  max-width: auto; /* Asegura un ancho máximo */
+  margin-left: auto 1rem; 
+  padding: 80px; 
+  
+  
+}
+
+.dashboard-title {
+  width: 100%; /* Asegura que el título ocupe todo el ancho disponible */
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-grid {
+  display: flex;
+  flex-wrap: wrap; /* Asegura que los elementos puedan envolverse si hay poco espacio */
+  justify-content: space-around; /* Distribuye espacio uniformemente alrededor de cada elemento */
+  align-items: flex-start; /* Alinea elementos al inicio de su contenedor */
+  width: 100%; /* Asegura que el grid ocupe todo el ancho disponible */
+  gap: 10px; /* Añade un espacio entre los gráficos */
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 1px 5px #000000; /* Corrige la sombra para que sea visible correctamente */
+}
+
+.chart-container {
+  flex: 2; /* Permite que cada contenedor de gráfico crezca para ocupar espacio disponible */
+  min-width: 300px; /* Asegura un ancho mínimo para cada gráfico */
+  height: 600px; /* Ajusta la altura de cada gráfico */
+  background-color: #ffffff;
+  border-radius: 8px;
+  position: relative;
+  margin: 1rem;
+  margin-left: 1rem;
+ 
+}
+
+.outer-container {
+  width: auto
+}
+
+.whatsapp-button {
+  position: absolute; /* Usa absolute para un posicionamiento más controlado */
+  bottom: 20px;
+  right: 20px;
+  background-color: #25D366;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+
+
+/*Mensaje de bienvenida que me hace parir*/
+
+
+.welcome-message {
+  flex: 1;
+  font-size: 22px !important;
+  text-align: center;
+  padding-block: 10rem !important;
+  padding: 5rem;
+  color: white;
+  background-color: #426594 !important;
+  width: 50dvh;
+}
