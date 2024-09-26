@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { FaPlus, FaEye, FaEyeSlash, FaTrashAlt, FaSave, FaEraser } from 'react-icons/fa';
 
 const Caso = () => {
@@ -11,15 +12,45 @@ const Caso = () => {
   const [showForm, setShowForm] = useState(false);
   const [showCases, setShowCases] = useState(false);
 
-  const agregarCaso = () => {
+  // Fetch cases from backend
+  useEffect(() => {
+    const fetchCasos = async () => {
+      try {
+        console.log('Solicitando casos...');
+        const response = await axios.get('http://localhost:3000/casos'); // Cambia la URL según tu configuración
+        console.log('Datos recibidos:', response.data);
+        setCasos(response.data);
+      } catch (error) {
+        console.error('Error al obtener los casos:', error);
+      }
+    };
+    fetchCasos();
+  }, []);
+
+  const agregarCaso = async () => {
     const nuevoCaso = { nombre, apellido, enfermedad, dni, telefono };
-    setCasos([...casos, nuevoCaso]);
-    setNombre('');
-    setApellido('');
-    setEnfermedad('');
-    setDni('');
-    setTelefono('');
-    setShowForm(false);
+    try {
+      console.log('Enviando nuevo caso:', nuevoCaso);
+      const response = await axios.post('http://localhost:3000/casos', nuevoCaso);
+      console.log('Caso agregado:', response.data);
+      setCasos([...casos, response.data]);
+      limpiarInputs();
+      setShowForm(false);
+    } catch (error) {
+      console.error('Error al agregar el caso:', error);
+    }
+  };
+
+  const borrarCaso = async (index) => {
+    const casoParaEliminar = casos[index];
+    try {
+      console.log('Eliminando caso con ID:', casoParaEliminar.id);
+      await axios.delete(`http://localhost:3000/casos/${casoParaEliminar.id}`); // Asegúrate de que el backend soporte la eliminación
+      const nuevosCasos = casos.filter((_, i) => i !== index);
+      setCasos(nuevosCasos);
+    } catch (error) {
+      console.error('Error al eliminar el caso:', error);
+    }
   };
 
   const limpiarInputs = () => {

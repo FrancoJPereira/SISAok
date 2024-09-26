@@ -105,6 +105,7 @@ button:focus-visible {
   overflow: hidden;  
   width: 80px; /* Tamaño inicial */
   position: relative;
+
 }
 
 .main-head.active {
@@ -113,6 +114,7 @@ button:focus-visible {
 
 .main-nav {
   padding: 20px;
+  height: 100dvh
 }
 
 .navbar-nav {
