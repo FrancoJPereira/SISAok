@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
 
 @Entity()
 export class Caso {
@@ -22,4 +22,7 @@ export class Caso {
 
   @Column()
   telefono: number;
+
+  @Column({ type: 'datetime', nullable: true })
+  createdAt: Date;
 }

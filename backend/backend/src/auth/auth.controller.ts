@@ -10,7 +10,7 @@ export class AuthController {
   async login(@Body() loginDto: LoginDto) {
     try {
       const user = await this.authService.validateUser(loginDto);
-      return { success: true, token: user.token }; // Retorna el token
+      return user; // Retorna el token y los datos del usuario
     } catch (error) {
       throw new HttpException('Credenciales inválidas', HttpStatus.UNAUTHORIZED);
     }

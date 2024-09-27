@@ -1,26 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FaPlus, FaEye, FaEyeSlash, FaTrashAlt, FaSave, FaEraser } from 'react-icons/fa';
+import { FaPlus, FaEye, FaEyeSlash, FaTrashAlt, FaSave, FaEraser, FaEdit } from 'react-icons/fa';
 
 const Caso = () => {
   const [casos, setCasos] = useState([]);
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [enfermedad, setEnfermedad] = useState('');
-  const [dni, setDni] = useState<number | undefined>(undefined);
-  const [telefono, setTelefono] = useState<number | undefined>(undefined);
+  const [dni, setDni] = useState(undefined);
+  const [telefono, setTelefono] = useState(undefined);
   const [showForm, setShowForm] = useState(false);
   const [showCases, setShowCases] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [editingIndex, setEditingIndex] = useState(null);
+  const [editingIndex, setEditingIndex] = useState(null); // Cambiado a null
 
   // Fetch cases from backend
   useEffect(() => {
     const fetchCasos = async () => {
       try {
-        console.log('Solicitando casos...');
-        const response = await axios.get('http://localhost:3000/casos'); // Cambia la URL según tu configuración
-        console.log('Datos recibidos:', response.data);
+        const response = await axios.get('http://localhost:3000/casos');
         setCasos(response.data);
       } catch (error) {
         console.error('Error al obtener los casos:', error);
@@ -32,35 +30,27 @@ const Caso = () => {
   const agregarCaso = async () => {
     const nuevoCaso = { nombre, apellido, enfermedad, dni, telefono };
 
-    if (isEditing) {
-      try {
+    try {
+      if (isEditing && editingIndex !== null) {
         const casoParaEditar = casos[editingIndex];
-        const response = await axios.put(`http://localhost:3000/casos/${casoParaEditar.id}`, nuevoCaso);
+        const response = await axios.put('http://localhost:3000/casos/${casoParaEditar.id}', nuevoCaso);
         const nuevosCasos = [...casos];
         nuevosCasos[editingIndex] = response.data;
         setCasos(nuevosCasos);
         setIsEditing(false);
         setEditingIndex(null);
-      } catch (error) {
-        console.error('Error al actualizar el caso:', error);
-    }
-
-    } else
-    try {
-      console.log('Enviando nuevo caso:', nuevoCaso);
-      const response = await axios.post('http://localhost:3000/casos', nuevoCaso);
-      console.log('Caso agregado:', response.data);
-      setCasos([...casos, response.data]);
+      } else {
+        const response = await axios.post('http://localhost:3000/casos', nuevoCaso);
+        setCasos([...casos, response.data]);
+      }
       limpiarInputs();
       setShowForm(false);
     } catch (error) {
-      console.error('Error al agregar el caso:', error);
+      console.error('Error al agregar/editar el caso:', error);
     }
-    limpiarInputs();
-    setShowForm(false);
   };
 
-  const editarCaso = (index) => {
+  const editarCaso = (index) => { // Sin tipo
     const casoParaEditar = casos[index];
     setNombre(casoParaEditar.nombre);
     setApellido(casoParaEditar.apellido);
@@ -69,14 +59,13 @@ const Caso = () => {
     setTelefono(casoParaEditar.telefono);
     setIsEditing(true);
     setEditingIndex(index);
-    setShowForm(true); // Mostrar el formulario con los datos precargados
+    setShowForm(true);
   };
 
   const borrarCaso = async (index) => {
     const casoParaEliminar = casos[index];
     try {
-      console.log('Eliminando caso con ID:', casoParaEliminar.id);
-      await axios.delete(`http://localhost:3000/casos/${casoParaEliminar.id}`); // Asegúrate de que el backend soporte la eliminación
+      await axios.delete('http://localhost:3000/casos/${casoParaEliminar.id}');
       const nuevosCasos = casos.filter((_, i) => i !== index);
       setCasos(nuevosCasos);
     } catch (error) {
@@ -88,8 +77,8 @@ const Caso = () => {
     setNombre('');
     setApellido('');
     setEnfermedad('');
-    setDni('');
-    setTelefono('');
+    setDni(undefined);
+    setTelefono(undefined);
   };
 
   const toggleForm = () => {
@@ -140,7 +129,7 @@ const Caso = () => {
       marginTop: '1rem',
     },
     input: {
-      padding: '0.70rem',   
+      padding: '0.70rem',
       marginBottom: '1rem',
       border: '1px solid #ccc',
       borderRadius: '4px',
@@ -200,7 +189,7 @@ const Caso = () => {
 
       {showForm && (
         <div style={styles.formContainer}>
-           <h2>{isEditing ? 'Editar Caso' : 'Agregar nuevo caso'}</h2>
+          <h2>{isEditing ? 'Editar Caso' : 'Agregar nuevo caso'}</h2>
           <input
             style={styles.input}
             type="text"
@@ -243,7 +232,7 @@ const Caso = () => {
               onMouseOut={(e) => (e.currentTarget.style.backgroundColor = styles.smallButton.backgroundColor)}
               onClick={agregarCaso}
             >
-              <FaSave /> {isEditing ? 'Actualizar Caso' : 'Guardar Caso'}
+              <FaSave /> Guardar Caso
             </button>
             <button
               style={styles.smallButton}
@@ -259,10 +248,10 @@ const Caso = () => {
 
       {showCases && (
         <div style={styles.caseList}>
-          <h2>Casos Asignados</h2>
+          <h2>Lista de Casos</h2>
           <table style={styles.caseTable}>
-            <thead style={styles.caseTableHeader}>
-              <tr>
+            <thead>
+              <tr style={styles.caseTableHeader}>
                 <th style={styles.caseTableCell}>Nombre</th>
                 <th style={styles.caseTableCell}>Apellido</th>
                 <th style={styles.caseTableCell}>Enfermedad</th>
@@ -273,18 +262,18 @@ const Caso = () => {
             </thead>
             <tbody>
               {casos.map((caso, index) => (
-                <tr key={index}>
+                <tr key={caso.id}>
                   <td style={styles.caseTableCell}>{caso.nombre}</td>
                   <td style={styles.caseTableCell}>{caso.apellido}</td>
                   <td style={styles.caseTableCell}>{caso.enfermedad}</td>
                   <td style={styles.caseTableCell}>{caso.dni}</td>
                   <td style={styles.caseTableCell}>{caso.telefono}</td>
                   <td style={styles.caseTableCell}>
+                    <button style={styles.smallButton} onClick={() => editarCaso(index)}>
+                      <FaEdit /> Editar
+                    </button>
                     <button style={styles.deleteButton} onClick={() => borrarCaso(index)}>
                       <FaTrashAlt /> Eliminar
-                    </button>
-                    <button style={styles.editButton} onClick={() => editarCaso(index)}>
-                    <FaEdit /> Editar
                     </button>
                   </td>
                 </tr>
