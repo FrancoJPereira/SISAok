@@ -7,10 +7,12 @@ const Caso = () => {
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [enfermedad, setEnfermedad] = useState('');
-  const [dni, setDni] = useState('');
-  const [telefono, setTelefono] = useState('');
+  const [dni, setDni] = useState<number | undefined>(undefined);
+  const [telefono, setTelefono] = useState<number | undefined>(undefined);
   const [showForm, setShowForm] = useState(false);
   const [showCases, setShowCases] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingIndex, setEditingIndex] = useState(null);
 
   // Fetch cases from backend
   useEffect(() => {
@@ -29,6 +31,21 @@ const Caso = () => {
 
   const agregarCaso = async () => {
     const nuevoCaso = { nombre, apellido, enfermedad, dni, telefono };
+
+    if (isEditing) {
+      try {
+        const casoParaEditar = casos[editingIndex];
+        const response = await axios.put(`http://localhost:3000/casos/${casoParaEditar.id}`, nuevoCaso);
+        const nuevosCasos = [...casos];
+        nuevosCasos[editingIndex] = response.data;
+        setCasos(nuevosCasos);
+        setIsEditing(false);
+        setEditingIndex(null);
+      } catch (error) {
+        console.error('Error al actualizar el caso:', error);
+    }
+
+    } else
     try {
       console.log('Enviando nuevo caso:', nuevoCaso);
       const response = await axios.post('http://localhost:3000/casos', nuevoCaso);
@@ -39,6 +56,20 @@ const Caso = () => {
     } catch (error) {
       console.error('Error al agregar el caso:', error);
     }
+    limpiarInputs();
+    setShowForm(false);
+  };
+
+  const editarCaso = (index) => {
+    const casoParaEditar = casos[index];
+    setNombre(casoParaEditar.nombre);
+    setApellido(casoParaEditar.apellido);
+    setEnfermedad(casoParaEditar.enfermedad);
+    setDni(casoParaEditar.dni);
+    setTelefono(casoParaEditar.telefono);
+    setIsEditing(true);
+    setEditingIndex(index);
+    setShowForm(true); // Mostrar el formulario con los datos precargados
   };
 
   const borrarCaso = async (index) => {
@@ -155,7 +186,7 @@ const Caso = () => {
           onMouseOut={(e) => (e.currentTarget.style.backgroundColor = styles.smallButton.backgroundColor)}
           onClick={toggleForm}
         >
-          <FaPlus /> Agregar Caso
+          <FaPlus /> {isEditing ? 'Cancelar Edición' : 'Agregar Caso'}
         </button>
         <button
           style={styles.smallButton}
@@ -169,7 +200,7 @@ const Caso = () => {
 
       {showForm && (
         <div style={styles.formContainer}>
-          <h2>Agregar nuevo caso</h2>
+           <h2>{isEditing ? 'Editar Caso' : 'Agregar nuevo caso'}</h2>
           <input
             style={styles.input}
             type="text"
@@ -193,17 +224,17 @@ const Caso = () => {
           />
           <input
             style={styles.input}
-            type="text"
+            type="number"
             placeholder="DNI"
             value={dni}
-            onChange={(e) => setDni(e.target.value)}
+            onChange={(e) => setDni(Number(e.target.value))}
           />
           <input
             style={styles.input}
-            type="text"
+            type="number"
             placeholder="Teléfono"
             value={telefono}
-            onChange={(e) => setTelefono(e.target.value)}
+            onChange={(e) => setTelefono(Number(e.target.value))}
           />
           <div style={styles.formButtons}>
             <button
@@ -212,7 +243,7 @@ const Caso = () => {
               onMouseOut={(e) => (e.currentTarget.style.backgroundColor = styles.smallButton.backgroundColor)}
               onClick={agregarCaso}
             >
-              <FaSave /> Guardar Caso
+              <FaSave /> {isEditing ? 'Actualizar Caso' : 'Guardar Caso'}
             </button>
             <button
               style={styles.smallButton}
@@ -251,6 +282,9 @@ const Caso = () => {
                   <td style={styles.caseTableCell}>
                     <button style={styles.deleteButton} onClick={() => borrarCaso(index)}>
                       <FaTrashAlt /> Eliminar
+                    </button>
+                    <button style={styles.editButton} onClick={() => editarCaso(index)}>
+                    <FaEdit /> Editar
                     </button>
                   </td>
                 </tr>

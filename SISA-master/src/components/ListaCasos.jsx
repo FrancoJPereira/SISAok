@@ -1,7 +1,7 @@
 import React from 'react';
 import { AiOutlineDelete } from 'react-icons/ai'; // Icono para el botón Eliminar
 
-const ListaCasos = ({ casos, borrarCaso }) => {
+const ListaCasos = ({ casos, borrarCaso, editarCaso }) => {
   const styles = {
     table: {
       width: '100%',
@@ -59,13 +59,16 @@ const ListaCasos = ({ casos, borrarCaso }) => {
               <td style={styles.td}>{caso.dni}</td>
               <td style={styles.td}>{caso.telefono}</td>
               <td style={styles.td}>
-                <button
-                  style={styles.deleteButton}
-                  onClick={() => borrarCaso(index)}
-                >
-                  <AiOutlineDelete style={styles.buttonIcon} />
-                  Eliminar
+                
+                <button style={styles.editButton} onClick={() => editarCaso(index)}>
+                  <AiOutlineEdit /> Editar
                 </button>
+              
+                <button
+                  style={styles.deleteButton} onClick={() => borrarCaso(index)}>
+                  <AiOutlineDelete style={styles.buttonIcon} /> Eliminar
+                </button>
+              
               </td>
             </tr>
           ))}

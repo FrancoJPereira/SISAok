@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios'; // Importamos Axios
+import axios from 'axios'; 
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    name: '',
+    surname: '',
     usuario: '',
     email: '',
     password: '',  
     confirmPassword: '',   
   });
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -22,7 +25,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { password, confirmPassword, email, firstName, lastName, usuario } = formData;
+    const { password, confirmPassword, email, name, surname, usuario } = formData;
 
     // Validación de contraseñas
     if (password !== confirmPassword) {
@@ -32,18 +35,18 @@ const Register = () => {
 
     try {
       const response = await axios.post('http://localhost:3000/users/register', { // Cambia la URL aquí
-        firstName: firstName, // Asegúrate de incluir los datos completos
-        lastName: lastName,
+        name,
+        surname,
         username: usuario,
-        email: email, 
-        password: password,
+        email, 
+        password,
       });
 
       if (response.status === 201) {
         toast.success('Registro exitoso. ¡Bienvenido!');
         setFormData({
-          firstName: '',
-          lastName: '',
+          name: '',
+          surname: '',
           usuario: '',
           email: '',
           password: '',
@@ -58,6 +61,31 @@ const Register = () => {
     }
   };
 
+  const generatePassword = (length = 12) => {
+    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    let password = ''
+    for (let i = 0; i < length; i++){
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      password += charset[randomIndex];
+    }
+    return password;
+  };
+
+  const handleGeneratePassword = () => {
+    const newPassword = generatePassword();
+    setFormData({
+      ...formData,
+      password: newPassword,
+      confirmPassword: newPassword,
+    });
+    setShowPassword(true); 
+    toast.info('Contraseña generada. Por favor, memoriza esta contraseña.');
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className="register-container" style={{ width: 'auto', height: 'auto' }}>
       <ToastContainer position="top-center" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
@@ -66,26 +94,26 @@ const Register = () => {
         <h2 className="register-title">Registrarse</h2>
         <form className="register-form" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
           <div className="form-group" style={{ marginBottom: '15px' }}>
-            <label htmlFor="firstName">Nombre:</label>
+            <label htmlFor="name">Nombre:</label>
             <input
               type="text"
-              id="firstName"
-              name="firstName"
+              id="name"
+              name="name"
               className="form-input"
-              value={formData.firstName}
+              value={formData.name}
               onChange={handleChange}
               required
               style={{ width: '100%' }}
             />
           </div>
           <div className="form-group" style={{ marginBottom: '15px' }}>
-            <label htmlFor="lastName">Apellido:</label>
+            <label htmlFor="surname">Apellido:</label>
             <input
               type="text"
-              id="lastName"
-              name="lastName"
+              id="surname"
+              name="surname"
               className="form-input"
-              value={formData.lastName}
+              value={formData.surname}
               onChange={handleChange}
               required
               style={{ width: '100%' }}
@@ -118,10 +146,12 @@ const Register = () => {
               style={{ width: '100%' }}
             />
           </div>
-          <div className="form-group" style={{ marginBottom: '15px' }}>
+
+          {/* Contraseña */}
+          <div className="form-group" style={{ marginBottom: '15px', position: 'relative' }}>
             <label htmlFor="password">Crea una contraseña:</label>
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               id="password"
               name="password"
               className="form-input"
@@ -130,11 +160,20 @@ const Register = () => {
               required
               style={{ width: '100%' }}
             />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              style={{ position: 'absolute', right: '10px', top: '30px', background: 'none', border: 'none', cursor: 'pointer' }}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </div>
-          <div className="form-group" style={{ marginBottom: '20px' }}>
+
+          {/* Confirmar Contraseña */}
+          <div className="form-group" style={{ marginBottom: '20px', position: 'relative' }}>
             <label htmlFor="confirmPassword">Repite la contraseña creada:</label>
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               id="confirmPassword"
               name="confirmPassword"
               className="form-input"
@@ -143,7 +182,18 @@ const Register = () => {
               required
               style={{ width: '100%' }}
             />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              style={{ position: 'absolute', right: '10px', top: '30px', background: 'none', border: 'none', cursor: 'pointer' }}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </div>
+
+          <button type="button" onClick={handleGeneratePassword} style={{ marginBottom: '15px', width: '100%' }}>
+            Generar Contraseña Aleatoria
+          </button>
           <button className="button-register" type="submit" style={{ width: '100%' }}>
             Registrarse
           </button>
