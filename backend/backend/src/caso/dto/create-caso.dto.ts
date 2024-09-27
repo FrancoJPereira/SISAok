@@ -1,9 +1,6 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateCasoDto {
-  @IsString()
-  @IsNotEmpty()
-  id: number;
 
   @IsString()
   @IsNotEmpty()
@@ -17,11 +14,11 @@ export class CreateCasoDto {
   @IsNotEmpty()
   enfermedad: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  dni: string;
+  dni: number;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  telefono: string;
+  telefono: number;
 }

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Caso } from './caso.entity';
 import { CreateCasoDto } from './dto/create-caso.dto';
+import { UpdateCasoDto } from './dto/update-caso.dto';
 
 @Injectable()
 export class CasoService {
@@ -18,6 +19,16 @@ export class CasoService {
   async create(createCasoDto: CreateCasoDto): Promise<Caso> {
     const nuevoCaso = this.casoRepository.create(createCasoDto);
     return this.casoRepository.save(nuevoCaso);
+  }
+
+  async update(id: number, updateCasoDto: UpdateCasoDto): Promise<Caso> {
+    const caso = await this.casoRepository.findOne({ where: { id } });
+    if (!caso) {
+      throw new NotFoundException(`Caso with ID ${id} not found`);
+    }
+    // Actualiza las propiedades del caso
+    Object.assign(caso, updateCasoDto);
+    return this.casoRepository.save(caso);
   }
 
   async remove(id: number): Promise<void> {

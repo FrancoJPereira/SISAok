@@ -11,12 +11,15 @@ export class Caso {
   @Column()
   apellido: string;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: ['Dengue'],
+  })
   enfermedad: string;
 
   @Column()
-  dni: string;
+  dni: number;
 
   @Column()
-  telefono: string;
+  telefono: number;
 }

@@ -8,17 +8,17 @@ import { CasoModule } from './caso/caso.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',   // Cambia por tu host de MySQL
-      port: 3306,          // Puerto por defecto de MySQL
-      username: 'root',    // Tu usuario de MySQL
-      password: 'admin',   // Tu contraseña de MySQL
-      database: 'test',  // Tu base de datos
+      host: 'localhost',   
+      port: 3306,          
+      username: 'root',    // cambien en usuario si es diferente
+      password: '43279670',   // pongan la contraseña de su MySQL
+      database: 'dengue_sr',  // el nombre de la base de datos (recuerden crearla antes en el Workbench)
       autoLoadEntities: true,
-      synchronize: true,  // Sincronización automática (solo en desarrollo)
+      synchronize: true,  
     }),
     UsersModule,
     AuthModule,   
-    CasoModule,  // Añadido a la misma lista de imports
+    CasoModule,  
   ],
 })
 export class AppModule {}
